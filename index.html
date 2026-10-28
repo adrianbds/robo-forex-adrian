@@ -1,0 +1,228 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="refresh" content="300">
+<title>Meu Robô · Resumo</title>
+<meta name="description" content="Resumo simples do robô de forex em conta de treino.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 32 32%22%3E%3Crect width=%2232%22 height=%2232%22 rx=%228%22 fill=%22%232a78d6%22/%3E%3Cpath d=%22M6 22l6-7 5 4 9-11%22 stroke=%22white%22 stroke-width=%223%22 fill=%22none%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22/%3E%3C/svg%3E">
+<style>
+:root{
+  color-scheme:light;
+  --bg:#f4f3ef; --card:#fcfcfb; --soft:#efeee9; --line:#e2e0da;
+  --ink:#0b0b0b; --ink-2:#52514e; --ink-3:#85847e;
+  --good:#0ca30c; --good-ink:#006300; --bad:#d03b3b; --bad-ink:#b02a2a; --blue:#2a78d6; --warn:#fab219;
+  --sans:"Segoe UI Variable","Segoe UI",system-ui,-apple-system,Roboto,sans-serif;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){color-scheme:dark;--bg:#121211;--card:#1a1a19;--soft:#242422;--line:#30302d;--ink:#f0efec;--ink-2:#c3c2b7;--ink-3:#8f8e86;--good-ink:#4fd04f;--bad-ink:#f07a7a;--blue:#3987e5}
+}
+:root[data-theme="dark"]{color-scheme:dark;--bg:#121211;--card:#1a1a19;--soft:#242422;--line:#30302d;--ink:#f0efec;--ink-2:#c3c2b7;--ink-3:#8f8e86;--good-ink:#4fd04f;--bad-ink:#f07a7a;--blue:#3987e5}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 var(--sans);-webkit-font-smoothing:antialiased}
+.wrap{max-width:760px;margin:0 auto;padding:22px 16px 48px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:20px;margin-top:14px}
+h1{font-size:clamp(24px,5vw,32px);margin:0;letter-spacing:-.02em}
+h2{font-size:18px;margin:0 0 12px}
+.muted{color:var(--ink-2)} .small{font-size:14px} .tiny{font-size:13px;color:var(--ink-3)}
+.status{display:flex;gap:14px;align-items:center}
+.status .icon{width:48px;height:48px;border-radius:50%;display:grid;place-items:center;font-size:24px;flex:none;background:var(--soft)}
+.status.on .icon{background:color-mix(in srgb,var(--good) 18%,transparent)}
+.status.off .icon{background:color-mix(in srgb,var(--bad) 16%,transparent)}
+.status b{font-size:19px}
+.nums{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+@media(max-width:560px){.nums{grid-template-columns:1fr}}
+.num{background:var(--soft);border-radius:14px;padding:14px}
+.num .l{font-size:14px;color:var(--ink-2)}
+.num .v{font-size:clamp(26px,6vw,34px);font-weight:700;letter-spacing:-.02em;font-variant-numeric:tabular-nums;line-height:1.2;margin-top:2px}
+.num .d{font-size:14px;color:var(--ink-2)}
+.up{color:var(--good-ink)} .down{color:var(--bad-ink)}
+.trade{border:1px solid var(--line);border-radius:14px;padding:16px}
+.trade + .trade{margin-top:10px}
+.trade .top{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;align-items:baseline}
+.trade .res{font-size:24px;font-weight:700;font-variant-numeric:tabular-nums}
+.meter{position:relative;height:14px;border-radius:99px;margin:14px 0 6px;background:linear-gradient(90deg,color-mix(in srgb,var(--bad) 55%,transparent),var(--soft) 33%,var(--soft) 33%,color-mix(in srgb,var(--good) 55%,transparent))}
+.meter .zero{position:absolute;left:33.3%;top:-4px;bottom:-4px;width:2px;background:var(--ink-3)}
+.meter .pin{position:absolute;top:50%;width:20px;height:20px;border-radius:50%;background:var(--ink);border:3px solid var(--card);transform:translate(-50%,-50%);box-shadow:0 1px 4px rgba(0,0,0,.25)}
+.meter-l{display:flex;justify-content:space-between;font-size:13px;color:var(--ink-2)}
+.graf{margin-top:16px}
+.graf svg{display:block;width:100%;height:auto;overflow:visible}
+.graf text{fill:var(--ink-3);font-size:11px;font-family:var(--sans)}
+.graf .tit{font-size:14px;color:var(--ink-2);margin-bottom:4px}
+.tip{position:absolute;pointer-events:none;background:var(--ink);color:var(--card);font-size:13px;padding:5px 9px;border-radius:7px;white-space:nowrap;transform:translate(-50%,-120%);opacity:0;transition:opacity .1s}
+.list{list-style:none;margin:0;padding:0}
+.list li{display:flex;justify-content:space-between;gap:12px;padding:11px 0;border-bottom:1px solid var(--line)}
+.list li:last-child{border-bottom:0}
+.when{white-space:nowrap;font-weight:600}
+.badge{display:inline-block;font-size:12.5px;font-weight:600;padding:2px 9px;border-radius:99px;background:var(--soft);color:var(--ink-2);white-space:nowrap}
+.badge.g{color:var(--good-ink);background:color-mix(in srgb,var(--good) 15%,transparent)}
+.badge.r{color:var(--bad-ink);background:color-mix(in srgb,var(--bad) 15%,transparent)}
+.empty{color:var(--ink-3);text-align:center;padding:10px 0}
+.bar{height:10px;border-radius:99px;background:var(--soft);overflow:hidden;margin-top:6px}
+.bar i{display:block;height:100%;background:var(--blue);border-radius:99px}
+details{margin-top:14px}
+summary{cursor:pointer;color:var(--ink-2);font-size:15px}
+.glos{display:grid;gap:8px;margin-top:10px;font-size:15px}
+.glos b{color:var(--ink)}
+footer{text-align:center;margin-top:24px;font-size:13px;color:var(--ink-3)}
+footer a{color:var(--blue)}
+button.theme{background:none;border:1px solid var(--line);color:var(--ink-2);border-radius:99px;padding:4px 10px;font:inherit;font-size:13px;cursor:pointer}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Meu Robô</h1>
+  <p class="muted small" style="margin:4px 0 0">Conta de <b>treino</b> (dinheiro de mentira) · atualizado <span id="quando"></span></p>
+
+  <div class="card"><div class="status" id="status"></div></div>
+
+  <div class="card">
+    <h2>Como estou indo</h2>
+    <div class="nums" id="nums"></div>
+  </div>
+
+  <div class="card">
+    <h2>Agora</h2>
+    <div id="agora"></div>
+  </div>
+
+  <div class="card">
+    <h2>Próximas notícias importantes</h2>
+    <p class="small muted" style="margin:-6px 0 8px">Perto delas o robô fica parado, por segurança.</p>
+    <ul class="list" id="news"></ul>
+  </div>
+
+  <div class="card">
+    <h2>Operações feitas</h2>
+    <ul class="list" id="hist"></ul>
+  </div>
+
+  <div class="card">
+    <h2>Quantas operações esperar</h2>
+    <div id="prev"></div>
+    <details>
+      <summary>O que significam essas palavras?</summary>
+      <div class="glos">
+        <div><b>Operação:</b> o robô aposta que um preço vai subir (compra) ou cair (venda).</div>
+        <div><b>Perda máxima:</b> se o preço for contra, a operação fecha sozinha nesse limite. Nunca perde mais que isso.</div>
+        <div><b>Meta de ganho:</b> se o preço for a favor, fecha sozinha ao atingir a meta, que é o dobro da perda máxima.</div>
+        <div><b>Euro × Dólar:</b> quanto vale 1 euro em dólares. Se sobe, o euro ficou mais forte.</div>
+        <div><b>Conta de treino:</b> tudo é real (preços, ordens), menos o dinheiro. Serve para provar o robô antes de usar dinheiro de verdade.</div>
+      </div>
+    </details>
+  </div>
+
+  <footer>
+    Não é recomendação de investimento · <a href="detalhes.html">ver detalhes técnicos</a> · <button class="theme" id="theme" type="button">claro/escuro</button>
+  </footer>
+</div>
+<script>
+const D = {"gerado_em": "30/10/2026 23:52", "status": {"online": true, "ligado": true, "desligado_piso": false, "modo": "1", "versao": "md-v1-monday-dip", "ultima_atividade": "30/10 18:35", "fim_de_semana": true}, "patrimonio": {"inicial": 200.0, "atual": 200.12, "serie": [["2026-10-27T14:00", 200.0], ["2026-10-27T15:00", 200.0], ["2026-10-27T16:00", 200.0], ["2026-10-27T18:00", 200.0], ["2026-10-27T20:00", 200.0], ["2026-10-27T21:00", 200.0], ["2026-10-27T22:00", 200.0], ["2026-10-27T23:00", 200.0], ["2026-10-28T00:00", 200.0], ["2026-10-28T01:00", 200.0], ["2026-10-28T02:00", 200.0], ["2026-10-28T03:00", 200.0], ["2026-10-28T04:00", 200.0], ["2026-10-28T05:00", 200.0], ["2026-10-28T06:00", 200.0], ["2026-10-28T07:00", 200.0], ["2026-10-28T08:00", 200.0], ["2026-10-28T09:00", 200.0], ["2026-10-28T10:00", 200.0], ["2026-10-28T11:00", 199.83], ["2026-10-28T13:00", 200.65], ["2026-10-28T14:00", 200.12], ["2026-10-28T15:00", 200.12], ["2026-10-28T16:00", 200.12], ["2026-10-29T01:00", 200.12], ["2026-10-29T02:00", 200.12], ["2026-10-29T03:00", 200.12], ["2026-10-29T04:00", 200.12], ["2026-10-29T05:00", 200.12], ["2026-10-29T06:00", 200.12], ["2026-10-29T07:00", 200.12], ["2026-10-29T08:00", 200.12], ["2026-10-29T09:00", 200.12], ["2026-10-29T10:00", 200.12], ["2026-10-29T11:00", 200.12], ["2026-10-29T12:00", 200.12], ["2026-10-29T13:00", 200.12], ["2026-10-29T14:00", 200.12], ["2026-10-29T15:00", 200.12], ["2026-10-29T16:00", 200.12], ["2026-10-29T17:00", 200.12], ["2026-10-29T18:00", 200.12], ["2026-10-29T19:00", 200.12], ["2026-10-29T20:00", 200.12], ["2026-10-29T21:00", 200.12], ["2026-10-29T22:00", 200.12], ["2026-10-29T23:00", 200.12], ["2026-10-30T00:00", 200.12], ["2026-10-30T01:00", 200.12], ["2026-10-30T02:00", 200.12], ["2026-10-30T03:00", 200.12], ["2026-10-30T04:00", 200.12], ["2026-10-30T05:00", 200.12], ["2026-10-30T06:00", 200.12], ["2026-10-30T07:00", 200.12], ["2026-10-30T08:00", 200.12], ["2026-10-30T09:00", 200.12], ["2026-10-30T10:00", 200.12], ["2026-10-30T11:00", 200.12], ["2026-10-30T12:00", 200.12], ["2026-10-30T13:00", 200.12], ["2026-10-30T14:00", 200.12], ["2026-10-30T15:00", 200.12], ["2026-10-30T16:00", 200.12], ["2026-10-30T17:00", 200.12]]}, "estatisticas": {"total": 1, "fechadas": 1, "abertas": 0, "acertos": 1, "erros": 0, "taxa": 100.0, "resultado_usd": 0.12, "r_medio": 0.1, "sinais": 12}, "operacoes": [{"ticket": "259286229", "simbolo": "AUDUSD", "direcao": "COMPRA", "entrada": "28/10 10:59", "entrada_iso": "2026-10-28T10:59:59", "preco_entrada": 0.70357, "stop": 0.70241, "alvo": 0.70589, "lotes": 0.01, "risco_usd": 1.23, "viavel_real": "sim", "status": "ganho", "saida": "28/10 14:45", "saida_iso": "2026-10-28T14:45:16", "preco_saida": 0.70375, "pips": 1.9, "resultado": 0.12, "motivo": "pedido_do_robo", "r": 0.1}], "demonstracoes": [{"ticket": "259298630", "simbolo": "US500", "direcao": "VENDA", "entrada": "28/10 15:35", "entrada_iso": "2026-10-28T15:35:03", "preco_entrada": 7739.3, "stop": 7757.6, "alvo": 7702.7, "lotes": 0.1, "risco_usd": null, "viavel_real": null, "status": "perda", "saida": "28/10 15:36", "saida_iso": "2026-10-28T15:36:39", "preco_saida": 7757.6, "pips": -181.0, "resultado": -1.81, "motivo": "stop"}, {"ticket": "259296695", "simbolo": "EURUSD", "direcao": "VENDA", "entrada": "28/10 15:10", "entrada_iso": "2026-10-28T15:10:00", "preco_entrada": 1.11345, "stop": 1.11484, "alvo": 1.11067, "lotes": 0.01, "risco_usd": null, "viavel_real": null, "status": "ganho", "saida": "28/10 15:29", "saida_iso": "2026-10-28T15:29:03", "preco_saida": 1.11334, "pips": 1.4, "resultado": 0.07, "motivo": "pedido_do_robo"}, {"ticket": "259295004", "simbolo": "US500", "direcao": "COMPRA", "entrada": "28/10 14:52", "entrada_iso": "2026-10-28T14:52:14", "preco_entrada": 7741.3, "stop": 7621.0, "alvo": 7982.0, "lotes": 0.1, "risco_usd": null, "viavel_real": null, "status": "perda", "saida": "28/10 14:58", "saida_iso": "2026-10-28T14:58:03", "preco_saida": 7740.4, "pips": -8.0, "resultado": -0.08, "motivo": "pedido_do_robo"}, {"ticket": "259294672", "simbolo": "EURUSD", "direcao": "VENDA", "entrada": "28/10 14:40", "entrada_iso": "2026-10-28T14:40:03", "preco_entrada": 1.11404, "stop": 1.11537, "alvo": 1.11139, "lotes": 0.01, "risco_usd": null, "viavel_real": null, "status": "perda", "saida": "28/10 14:45", "saida_iso": "2026-10-28T14:45:00", "preco_saida": 1.11406, "pips": -0.2, "resultado": -0.09, "motivo": "pedido_do_robo"}, {"ticket": "259294658", "simbolo": "AUDUSD", "direcao": "COMPRA", "entrada": "28/10 14:39", "entrada_iso": "2026-10-28T14:39:51", "preco_entrada": 0.70372, "stop": 0.70251, "alvo": 0.70614, "lotes": 0.01, "risco_usd": null, "viavel_real": null, "status": "ganho", "saida": "28/10 14:45", "saida_iso": "2026-10-28T14:45:01", "preco_saida": 0.7038, "pips": 0.8, "resultado": 0.01, "motivo": "pedido_do_robo"}, {"ticket": "259294553", "simbolo": "AUDUSD", "direcao": "COMPRA", "entrada": "28/10 14:35", "entrada_iso": "2026-10-28T14:35:50", "preco_entrada": 0.70377, "stop": 0.70256, "alvo": 0.70619, "lotes": 0.01, "risco_usd": null, "viavel_real": null, "status": "perda", "saida": "28/10 14:45", "saida_iso": "2026-10-28T14:45:16", "preco_saida": 0.70373, "pips": -0.5, "resultado": -0.12, "motivo": "pedido_do_robo"}, {"ticket": "259286257", "simbolo": "EURUSD", "direcao": "VENDA", "entrada": "28/10 11:00", "entrada_iso": "2026-10-28T11:00:00", "preco_entrada": 1.11344, "stop": 1.11465, "alvo": 1.11102, "lotes": 0.01, "risco_usd": null, "viavel_real": null, "status": "perda", "saida": "28/10 11:05", "saida_iso": "2026-10-28T11:05:00", "preco_saida": 1.11341, "pips": 0.3, "resultado": -0.04, "motivo": "pedido_do_robo"}, {"ticket": "259262163", "simbolo": "EURUSD", "direcao": "VENDA", "entrada": "27/10 22:28", "entrada_iso": "2026-10-27T22:28:06", "preco_entrada": 1.11256, "stop": 1.11385, "alvo": 1.10998, "lotes": 0.01, "risco_usd": null, "viavel_real": null, "status": "ganho", "saida": "27/10 22:33", "saida_iso": "2026-10-27T22:33:00", "preco_saida": 1.11245, "pips": 1.1, "resultado": 0.04, "motivo": "pedido_do_robo"}, {"ticket": "259254051", "simbolo": "EURUSD", "direcao": "VENDA", "entrada": "27/10 15:00", "entrada_iso": "2026-10-27T15:00:02", "preco_entrada": 1.11336, "stop": 1.11481, "alvo": 1.11046, "lotes": 0.01, "risco_usd": null, "viavel_real": null, "status": "perda", "saida": "27/10 16:00", "saida_iso": "2026-10-27T16:00:04", "preco_saida": 1.11346, "pips": -1.1, "resultado": -0.18, "motivo": "pedido_do_robo"}], "bloqueios": {"noticia": 7}, "ao_vivo": {"posicoes": [], "precos": [{"simbolo": "EURUSD", "quando": "17:54", "bid": "1.11661", "spread": "0.2"}, {"simbolo": "AUDUSD", "quando": "17:54", "bid": "0.70327", "spread": "0.9"}, {"simbolo": "US500", "quando": "17:54", "bid": "7580.9", "spread": "4.0"}]}, "trilhas": [{"ticket": "259298630", "simbolo": "US500", "direcao": "VENDA", "aberta": false, "pontos": [["15:35", -0.0], ["15:35", -0.27], ["15:35", -0.95], ["15:36", -1.58], ["15:36", -1.81]]}], "spread_hora": {"EURUSD": {"0": 0.0, "1": 0.05, "2": 0.0, "3": 0.0, "4": 0.1, "5": 0.0, "6": 0.0, "7": 0.05, "8": 0.0, "9": 0.1, "10": 0.0, "11": 0.1, "12": 0.0, "13": 0.0, "14": 0.0, "15": 0.05, "16": 0.0, "17": 0.2, "18": 6.3, "19": 3.0, "20": 0.0, "21": 0.0, "22": 0.1, "23": 0.0}, "AUDUSD": {"0": 0.0, "1": 0.1, "2": 0.15, "3": 0.2, "4": 0.1, "5": 0.1, "6": 0.0, "7": 0.05, "8": 0.1, "9": 0.1, "10": 0.1, "11": 0.05, "12": 0.1, "13": 0.1, "14": 0.1, "15": 0.1, "16": 0.25, "17": 0.3, "18": 6.0, "19": 2.45, "20": 0.1, "21": 0.1, "22": 0.05, "23": 0.15}, "US500": {"0": 4.0, "1": 4.0, "2": 4.0, "8": 4.0, "9": 4.0, "10": 4.0, "11": 4.0, "12": 4.0, "13": 4.0, "14": 4.0, "15": 4.0, "16": 4.0, "17": 4.0, "18": 4.0, "19": 4.0, "23": 4.0}}, "noticias": [{"iso": "2026-10-27T21:30:00", "quando": "ter 27/10 21:30", "moeda": "AUD", "titulo": "CPI m/m", "passou": true, "afeta": true}, {"iso": "2026-10-27T21:30:00", "quando": "ter 27/10 21:30", "moeda": "AUD", "titulo": "CPI y/y", "passou": true, "afeta": true}, {"iso": "2026-10-27T21:30:00", "quando": "ter 27/10 21:30", "moeda": "AUD", "titulo": "Trimmed Mean CPI m/m", "passou": true, "afeta": true}, {"iso": "2026-10-28T09:30:00", "quando": "qua 28/10 09:30", "moeda": "GBP", "titulo": "Annual Budget Release", "passou": true, "afeta": false}, {"iso": "2026-10-28T15:00:00", "quando": "qua 28/10 15:00", "moeda": "USD", "titulo": "Federal Funds Rate", "passou": true, "afeta": true}, {"iso": "2026-10-28T15:00:00", "quando": "qua 28/10 15:00", "moeda": "USD", "titulo": "FOMC Statement", "passou": true, "afeta": true}, {"iso": "2026-10-28T15:30:00", "quando": "qua 28/10 15:30", "moeda": "USD", "titulo": "FOMC Press Conference", "passou": true, "afeta": true}, {"iso": "2026-10-29T09:30:00", "quando": "qui 29/10 09:30", "moeda": "USD", "titulo": "Advance GDP q/q", "passou": true, "afeta": true}, {"iso": "2026-10-29T09:30:00", "quando": "qui 29/10 09:30", "moeda": "USD", "titulo": "Core PCE Price Index m/m", "passou": true, "afeta": true}, {"iso": "2026-10-29T10:15:00", "quando": "qui 29/10 10:15", "moeda": "EUR", "titulo": "Main Refinancing Rate", "passou": true, "afeta": true}, {"iso": "2026-10-29T10:15:00", "quando": "qui 29/10 10:15", "moeda": "EUR", "titulo": "Monetary Policy Statement", "passou": true, "afeta": true}, {"iso": "2026-10-29T10:45:00", "quando": "qui 29/10 10:45", "moeda": "EUR", "titulo": "ECB Press Conference", "passou": true, "afeta": true}, {"iso": "2026-10-30T00:02:00", "quando": "sex 30/10 00:02", "moeda": "JPY", "titulo": "BOJ Outlook Report", "passou": true, "afeta": false}, {"iso": "2026-10-30T00:02:00", "quando": "sex 30/10 00:02", "moeda": "JPY", "titulo": "BOJ Policy Rate", "passou": true, "afeta": false}, {"iso": "2026-10-30T00:02:00", "quando": "sex 30/10 00:02", "moeda": "JPY", "titulo": "Monetary Policy Statement", "passou": true, "afeta": false}, {"iso": "2026-10-30T03:30:00", "quando": "sex 30/10 03:30", "moeda": "JPY", "titulo": "BOJ Press Conference", "passou": true, "afeta": false}], "previsao": {"semana_min": 1, "semana_max": 3, "mes_min": 5, "mes_max": 12, "fonte": "estimativa preliminar (teste de 1 mês); será substituída pelo resultado da Fase 1", "semana_feitas": 1, "mes_feitas": 1}, "recentes": [{"t": "30/10 18:35", "sim": "US500", "ev": "inicio", "txt": "versao=md-v1-monday-dip modo=1 capital_virtual=200.00 patrimonio_virtual=200.00 desligado=nao autotrading=sim negociacao_permitida=sim"}, {"t": "30/10 18:35", "sim": "US500", "ev": "inicio", "txt": "versao=v2-reversao-adrian modo=1 capital_virtual=200.00 patrimonio_virtual=200.12 desligado=nao autotrading=sim negociacao_permitida=sim"}, {"t": "30/10 18:35", "sim": "AUDUSD", "ev": "inicio", "txt": "versao=v0-rodagem modo=0 capital_virtual=200.00 patrimonio_virtual=200.12 desligado=nao autotrading=sim negociacao_permitida=sim"}, {"t": "30/10 18:35", "sim": "EURUSD", "ev": "inicio", "txt": "versao=v0-rodagem modo=0 capital_virtual=200.00 patrimonio_virtual=200.12 desligado=nao autotrading=sim negociacao_permitida=sim"}, {"t": "30/10 18:35", "sim": "US500", "ev": "fim", "txt": "motivo=9"}, {"t": "30/10 18:35", "sim": "US500", "ev": "fim", "txt": "motivo=9"}, {"t": "30/10 18:35", "sim": "AUDUSD", "ev": "fim", "txt": "motivo=9"}, {"t": "30/10 18:35", "sim": "EURUSD", "ev": "fim", "txt": "motivo=9"}, {"t": "30/10 18:34", "sim": "US500", "ev": "inicio", "txt": "versao=md-v1-monday-dip modo=1 capital_virtual=200.00 patrimonio_virtual=200.00 desligado=nao autotrading=sim negociacao_permitida=sim"}, {"t": "30/10 18:34", "sim": "US500", "ev": "inicio", "txt": "versao=v2-reversao-adrian modo=1 capital_virtual=200.00 patrimonio_virtual=200.12 desligado=nao autotrading=sim negociacao_permitida=sim"}, {"t": "30/10 18:34", "sim": "AUDUSD", "ev": "inicio", "txt": "versao=v0-rodagem modo=0 capital_virtual=200.00 patrimonio_virtual=200.12 desligado=nao autotrading=sim negociacao_permitida=sim"}, {"t": "30/10 18:34", "sim": "EURUSD", "ev": "inicio", "txt": "versao=v0-rodagem modo=0 capital_virtual=200.00 patrimonio_virtual=200.12 desligado=nao autotrading=sim negociacao_permitida=sim"}, {"t": "30/10 18:33", "sim": "US500", "ev": "fim", "txt": "motivo=9"}, {"t": "30/10 18:33", "sim": "US500", "ev": "fim", "txt": "motivo=9"}, {"t": "30/10 18:33", "sim": "AUDUSD", "ev": "fim", "txt": "motivo=9"}, {"t": "30/10 18:33", "sim": "EURUSD", "ev": "fim", "txt": "motivo=9"}, {"t": "30/10 18:32", "sim": "US500", "ev": "inicio", "txt": "versao=v2-reversao-adrian modo=1 capital_virtual=200.00 patrimonio_virtual=200.12 desligado=nao autotrading=sim negociacao_permitida=sim"}, {"t": "30/10 18:32", "sim": "AUDUSD", "ev": "inicio", "txt": "versao=v0-rodagem modo=0 capital_virtual=200.00 patrimonio_virtual=200.12 desligado=nao autotrading=sim negociacao_permitida=sim"}, {"t": "30/10 18:32", "sim": "EURUSD", "ev": "inicio", "txt": "versao=v0-rodagem modo=0 capital_virtual=200.00 patrimonio_virtual=200.12 desligado=nao autotrading=sim negociacao_permitida=sim"}, {"t": "30/10 18:27", "sim": "US500", "ev": "inicio", "txt": "versao=v2-reversao-adrian modo=1 capital_virtual=200.00 patrimonio_virtual=200.12 desligado=nao autotrading=sim negociacao_permitida=sim"}, {"t": "30/10 18:27", "sim": "US500", "ev": "inicio", "txt": "versao=md-v1-monday-dip modo=1 capital_virtual=200.00 patrimonio_virtual=200.00 desligado=nao autotrading=sim negociacao_permitida=sim"}, {"t": "30/10 18:27", "sim": "AUDUSD", "ev": "inicio", "txt": "versao=v0-rodagem modo=0 capital_virtual=200.00 patrimonio_virtual=200.12 desligado=nao autotrading=sim negociacao_permitida=sim"}, {"t": "30/10 18:27", "sim": "EURUSD", "ev": "inicio", "txt": "versao=v0-rodagem modo=0 capital_virtual=200.00 patrimonio_virtual=200.12 desligado=nao autotrading=sim negociacao_permitida=sim"}, {"t": "30/10 18:27", "sim": "US500", "ev": "fim", "txt": "motivo=9"}, {"t": "30/10 18:27", "sim": "US500", "ev": "fim", "txt": "motivo=9"}, {"t": "30/10 18:27", "sim": "AUDUSD", "ev": "fim", "txt": "motivo=9"}, {"t": "30/10 18:27", "sim": "EURUSD", "ev": "fim", "txt": "motivo=9"}, {"t": "30/10 17:21", "sim": "EURUSD", "ev": "permissao", "txt": "negociacao automatizada LIGADA"}, {"t": "30/10 17:21", "sim": "AUDUSD", "ev": "permissao", "txt": "negociacao automatizada LIGADA"}, {"t": "30/10 17:21", "sim": "US500", "ev": "permissao", "txt": "negociacao automatizada LIGADA"}, {"t": "30/10 17:21", "sim": "US500", "ev": "inicio", "txt": "versao=md-v1-monday-dip modo=1 capital_virtual=200.00 patrimonio_virtual=200.00 desligado=nao autotrading=sim negociacao_permitida=sim"}, {"t": "30/10 17:21", "sim": "AUDUSD", "ev": "inicio", "txt": "versao=v0-rodagem modo=0 capital_virtual=200.00 patrimonio_virtual=200.12 desligado=nao autotrading=sim negociacao_permitida=sim"}, {"t": "30/10 17:21", "sim": "EURUSD", "ev": "inicio", "txt": "versao=v0-rodagem modo=0 capital_virtual=200.00 patrimonio_virtual=200.12 desligado=nao autotrading=sim negociacao_permitida=sim"}, {"t": "30/10 17:21", "sim": "US500", "ev": "fim", "txt": "motivo=9"}, {"t": "30/10 17:21", "sim": "US500", "ev": "fim", "txt": "motivo=9"}, {"t": "30/10 17:21", "sim": "AUDUSD", "ev": "fim", "txt": "motivo=9"}, {"t": "30/10 17:21", "sim": "EURUSD", "ev": "fim", "txt": "motivo=9"}, {"t": "30/10 17:12", "sim": "US500", "ev": "permissao", "txt": "negociacao automatizada LIGADA"}, {"t": "30/10 17:12", "sim": "AUDUSD", "ev": "permissao", "txt": "negociacao automatizada LIGADA"}, {"t": "30/10 17:12", "sim": "EURUSD", "ev": "permissao", "txt": "negociacao automatizada LIGADA"}]};
+const $ = (id) => document.getElementById(id);
+const esc = (s) => String(s ?? "").replace(/[&<>"]/g, (c) => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const din = (v) => v == null ? "—" : (v < 0 ? "−" : v > 0 ? "+" : "") + "US$ " + Math.abs(v).toFixed(2).replace(".", ",");
+const PAR = {EURUSD:"Euro × Dólar", AUDUSD:"Dólar australiano × Dólar"};
+const MOEDA = {USD:"EUA", EUR:"Europa", AUD:"Austrália", GBP:"Reino Unido", JPY:"Japão"};
+function traduz(t, m){
+  const regras = [[/Federal Funds Rate|Main Refinancing Rate|Cash Rate|Policy Rate|Official Bank Rate/i,"Decisão de juros"],
+    [/Press Conference/i,"Entrevista do banco central"],[/Statement/i,"Comunicado do banco central"],
+    [/Non-Farm|NFP/i,"Relatório de empregos"],[/CPI|PCE|Inflation/i,"Inflação"],[/GDP/i,"PIB (crescimento da economia)"],
+    [/Retail Sales/i,"Vendas no varejo"],[/Unemployment|Employment/i,"Emprego"],[/Budget/i,"Orçamento do governo"],[/Outlook/i,"Relatório do banco central"]];
+  for (const [re, nome] of regras) if (re.test(t)) return nome + " — " + (MOEDA[m] || m);
+  return t + " — " + (MOEDA[m] || m);
+}
+function dia(iso){
+  const d = new Date(iso), hoje = new Date(); const amanha = new Date(); amanha.setDate(hoje.getDate()+1);
+  const mesmo = (a,b) => a.toDateString() === b.toDateString();
+  const hora = iso.slice(11,16);
+  if (mesmo(d, hoje)) return "Hoje " + hora;
+  if (mesmo(d, amanha)) return "Amanhã " + hora;
+  return ["dom","seg","ter","qua","qui","sex","sáb"][d.getDay()] + " " + iso.slice(8,10) + "/" + iso.slice(5,7) + " " + hora;
+}
+
+function render(){
+  const s = D.status, e = D.estatisticas, p = D.patrimonio;
+  $("quando").textContent = D.gerado_em.slice(11) === "" ? D.gerado_em : "às " + D.gerado_em.slice(11) + " de " + D.gerado_em.slice(0,5);
+  let ic, tit, txt, cls;
+  if (s.desligado_piso) { cls="off"; ic="⛔"; tit="Robô desligado"; txt="Ele parou sozinho porque atingiu o limite de segurança da conta."; }
+  else if (s.online && s.ligado) { cls="on"; ic="✅"; tit="Robô ligado e trabalhando"; txt="Ele confere o índice americano (US500) todo fim de dia e, quando há queda exagerada, compra logo depois da abertura da bolsa de Nova York (10h35 de Brasília até 31/10, 11h35 a partir de 2/11). As moedas ficam só em observação."; }
+  else if (s.fim_de_semana) { cls=""; ic="🌙"; tit="Mercado fechado"; txt="O mercado reabre domingo à noite. O robô volta sozinho."; }
+  else { cls="off"; ic="⚠️"; tit="Sem notícias do robô"; txt="O MetaTrader pode estar fechado ou o computador desligado."; }
+  $("status").className = "status " + cls;
+  $("status").innerHTML = `<div class="icon" aria-hidden="true">${ic}</div><div><b>${tit}</b><div class="small muted">${txt}</div></div>`;
+
+  const ganho = p.atual - p.inicial;
+  $("nums").innerHTML = `
+    <div class="num"><div class="l">Saldo da conta</div><div class="v">US$ ${p.atual.toFixed(2).replace(".", ",")}</div><div class="d ${ganho>=0?"up":"down"}">${din(ganho)} desde o início (US$ ${p.inicial})</div></div>
+    <div class="num"><div class="l">Operações</div><div class="v">${e.fechadas}</div><div class="d">${e.fechadas ? `<span class="up">${e.acertos} ganhou</span> · <span class="down">${e.erros} perdeu</span>` : "nenhuma terminada ainda"}</div></div>
+    <div class="num"><div class="l">Resultado total</div><div class="v ${e.resultado_usd>=0?"up":"down"}">${din(e.resultado_usd)}</div><div class="d">${e.taxa == null ? "aparece após a 1ª operação" : `acertou ${e.taxa.toString().replace(".", ",")}% das vezes`}</div></div>`;
+
+  const pos = (D.ao_vivo && D.ao_vivo.posicoes) || [];
+  $("agora").innerHTML = pos.length ? pos.map(o => {
+    const dir = o.direcao === "VENDA" ? "apostando que vai <b>cair</b>" : "apostando que vai <b>subir</b>";
+    const entrada = +o.entrada, stop = +o.stop, alvo = +o.alvo, atual = +o.atual;
+    const perdaMax = Math.abs(entrada - stop), meta = Math.abs(alvo - entrada);
+    const avanco = (atual - entrada) * (o.direcao === "VENDA" ? -1 : 1);
+    const pct = Math.max(0, Math.min(100, 33.33 + (avanco >= 0 ? avanco / meta * 66.67 : avanco / perdaMax * 33.33)));
+    const r = o.resultado || 0;
+    return `<div class="trade"><div class="top"><div><b>${esc(PAR[o.simbolo] || o.simbolo)}</b> · ${dir}<div class="small muted">desde as ${esc(o.abertura)}${o.tipo === "demo" ? " · operação de demonstração" : ""}</div></div>
+      <div class="res ${r>=0?"up":"down"}">${din(r)}</div></div>
+      <div class="meter" role="img" aria-label="posição entre perda máxima e meta"><span class="zero"></span><span class="pin" style="left:${pct}%"></span></div>
+      <div class="meter-l"><span>perda máxima</span><span>empate</span><span>meta de ganho</span></div></div>`;
+  }).join("") : `<div class="empty">Nenhuma operação aberta agora. O robô está esperando uma boa oportunidade.</div>`;
+  (D.trilhas || []).forEach((t, k) => desenharTrilha(t, k));
+
+  const prox = D.noticias.filter(n => !n.passou && n.afeta);
+  const vistos = new Set(); const lista = [];
+  for (const n of prox) { const k = n.iso.slice(0,16) + n.moeda; if (vistos.has(k)) continue; vistos.add(k); lista.push(n); if (lista.length === 4) break; }
+  $("news").innerHTML = lista.length ? lista.map(n => `<li><span>${esc(traduz(n.titulo, n.moeda))}</span><span class="when">${dia(n.iso)}</span></li>`).join("")
+    : `<li class="empty">Nenhuma notícia importante pela frente nesta semana.</li>`;
+
+  const hist = [...D.operacoes.filter(o => o.status !== "aberta"), ...D.demonstracoes.filter(o => o.status !== "aberta")]
+    .sort((a,b) => (b.saida_iso||"").localeCompare(a.saida_iso||"")).slice(0, 10);
+  $("hist").innerHTML = hist.length ? hist.map(o => `<li><span>${esc(o.saida || o.entrada)} · ${esc(PAR[o.simbolo] || o.simbolo)}${D.demonstracoes.includes(o) ? ' <span class="badge">demonstração</span>' : ""}</span>
+      <span class="badge ${o.status === "ganho" ? "g" : "r"}">${o.status === "ganho" ? "ganhou" : "perdeu"} ${din(o.resultado).replace("+","").replace("−","")}</span></li>`).join("")
+    : `<li class="empty">Ainda nenhuma operação terminada.</li>`;
+
+  const pv = D.previsao;
+  $("prev").innerHTML = `
+    <div class="small">Esta semana: <b>${pv.semana_feitas}</b> de ${pv.semana_min} a ${pv.semana_max} esperadas</div>
+    <div class="bar"><i style="width:${Math.min(100, pv.semana_max ? pv.semana_feitas / pv.semana_max * 100 : 0)}%"></i></div>
+    <div class="small" style="margin-top:12px">Este mês: <b>${pv.mes_feitas}</b> de ${pv.mes_min} a ${pv.mes_max} esperadas</div>
+    <div class="bar"><i style="width:${Math.min(100, pv.mes_max ? pv.mes_feitas / pv.mes_max * 100 : 0)}%"></i></div>
+    <p class="tiny" style="margin:10px 0 0">Poucas operações é de propósito: o robô só entra quando várias condições se juntam. Operar demais é o que mais faz as pessoas perderem dinheiro.</p>`;
+}
+function desenharTrilha(t, k){
+  const box = document.createElement("div"); box.className = "graf"; box.style.position = "relative";
+  const pts = t.pontos.filter(p => p[1] != null);
+  box.innerHTML = `<div class="tit">${t.aberta ? "Como o resultado está andando" : "Como foi a última operação"} — ${esc(PAR[t.simbolo] || t.simbolo)} (US$)</div>`;
+  $("agora").appendChild(box);
+  if (pts.length < 2) { box.insertAdjacentHTML("beforeend", `<div class="empty">O gráfico aparece em instantes (um ponto a cada 30 segundos).</div>`); return; }
+  const W=640,H=200,L=44,R=118,T=10,B=24;
+  const vals = pts.map(p=>p[1]).concat([0, t.perda_max ?? 0, t.meta ?? 0]);
+  let lo=Math.min(...vals), hi=Math.max(...vals); const pad=(hi-lo)*.08||1; lo-=pad; hi+=pad;
+  const mins=pts.map(p=>{const [h,m]=p[0].split(":").map(Number);return h*60+m;}); for(let i=1;i<mins.length;i++) if(mins[i]<mins[i-1]) mins[i]+=1440;
+  const m0=mins[0], m1=Math.max(mins[mins.length-1], m0+1);
+  const x=i=>L+(W-L-R)*(mins[i]-m0)/(m1-m0), y=v=>T+(H-T-B)*(1-(v-lo)/(hi-lo));
+  const ns="http://www.w3.org/2000/svg", el=(n,a,p)=>{const e=document.createElementNS(ns,n);for(const q in a)e.setAttribute(q,a[q]);p.appendChild(e);return e;};
+  const svg=el("svg",{viewBox:`0 0 ${W} ${H}`,role:"img","aria-label":"Resultado da operação ao longo do tempo"},box);
+  const ref=(v,cor,txt)=>{ if(v==null) return; el("line",{x1:L,x2:W-R,y1:y(v),y2:y(v),stroke:cor,"stroke-dasharray":"4 4","stroke-width":1.5},svg); const tx=el("text",{x:W-R+6,y:y(v)+4},svg); tx.textContent=txt; tx.style.fill=cor; };
+  ref(t.meta,"var(--good-ink)","meta "+din(t.meta)); ref(t.perda_max,"var(--bad-ink)","limite "+din(t.perda_max));
+  el("line",{x1:L,x2:W-R,y1:y(0),y2:y(0),stroke:"var(--ink-3)"},svg); const z=el("text",{x:W-R+6,y:y(0)+4},svg); z.textContent="empate";
+  [lo+pad, hi-pad].forEach(v=>{const tx=el("text",{x:L-6,y:y(v)+4,"text-anchor":"end"},svg); tx.textContent=v.toFixed(2).replace(".",",");});
+  const ult = pts[pts.length-1][1];
+  el("polyline",{points:pts.map((p,i)=>`${x(i)},${y(p[1])}`).join(" "),fill:"none",stroke:ult>=0?"var(--good-ink)":"var(--bad-ink)","stroke-width":2.2,"stroke-linejoin":"round","stroke-linecap":"round"},svg);
+  el("circle",{cx:x(pts.length-1),cy:y(ult),r:4.5,fill:ult>=0?"var(--good-ink)":"var(--bad-ink)",stroke:"var(--card)","stroke-width":2},svg);
+  [[0,"start"],[pts.length-1,"end"]].forEach(([i,a])=>{const tx=el("text",{x:x(i),y:H-6,"text-anchor":a},svg); tx.textContent=pts[i][0];});
+  const tip=document.createElement("div"); tip.className="tip"; box.appendChild(tip);
+  const hit=el("rect",{x:L,y:T,width:W-L-R,height:H-T-B,fill:"transparent"},svg);
+  hit.addEventListener("pointermove",ev=>{const r=svg.getBoundingClientRect();const px=(ev.clientX-r.left)/r.width*W; let i=0; for(let k=0;k<pts.length;k++) if(Math.abs(x(k)-px)<Math.abs(x(i)-px)) i=k;
+    tip.style.left=(x(i)/W*100)+"%"; tip.style.top=(y(pts[i][1])/H*r.height+box.querySelector(".tit").offsetHeight)+"px"; tip.style.opacity=1; tip.textContent=pts[i][0]+" · "+din(pts[i][1]);});
+  hit.addEventListener("pointerleave",()=>tip.style.opacity=0);
+}
+$("theme").addEventListener("click",()=>{const r=document.documentElement;const atual=r.dataset.theme||(matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light");r.dataset.theme=atual==="dark"?"light":"dark";});
+render();
+</script>
+</body>
+</html>
